@@ -1,10 +1,13 @@
+#include <algorithm> // std::transform
 #include <array>
 #include <charconv> // std::from_chars
 #include <cstddef>  // size_t
 #include <cstdint>
 #include <fstream>
 #include <iostream>
+#include <ranges>
 #include <string>
+#include <string_view>
 #include <vector>
 
 constexpr size_t BINARY_STL_HEADER_SIZE = 80;
@@ -82,13 +85,19 @@ static void read_stl(std::ifstream &ifs, std::vector<Triangle> &triangles) {
   }
 }
 
+// Based on: https://en.cppreference.com/mwiki/index.php?title=cpp/string/byte/tolower&oldid=152869#Notes
+static std::string str_tolower(std::string s) {
+  std::ranges::transform(s, s.begin(), [](unsigned char c) { return std::tolower(c); });
+  return s;
+}
+
 int main(int argc, char **argv) {
   if (argc != 2) {
     std::cerr << "Expected arguments: /path/to/mesh/file" << std::endl;
     return 1;
   }
 
-  const char *filepath = argv[1];
+  std::string filepath = argv[1];
 
   // What is the idiomatic C++17 standard approach to reading binary files?
   // https://stackoverflow.com/a/51353040/8094047
@@ -104,9 +113,16 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  std::vector<Triangle> triangles;
-  read_stl(ifs, triangles);
-  std::cout << "Number of triangles: " << triangles.size() << std::endl;
+  // We convert to lower case so that comparing suffix later is case-insensitive
+  filepath = str_tolower(filepath);
+
+  if (filepath.ends_with(".stl")) {
+    std::vector<Triangle> triangles;
+    read_stl(ifs, triangles);
+    std::cout << "Number of triangles: " << triangles.size() << std::endl;
+  } else {
+    std::cout << "Unsupported format" << std::endl;
+  }
 
   return 0;
 }
