@@ -13,6 +13,6 @@ macro(enable_asan target scope)
 endmacro()
 
 add_executable(meshproc meshproc.cpp)
-target_compile_features(meshproc PUBLIC cxx_std_17)
+target_compile_features(meshproc PUBLIC cxx_std_20)
 set_target_properties(meshproc PROPERTIES CXX_EXTENSIONS OFF)
 enable_asan(meshproc PRIVATE)
