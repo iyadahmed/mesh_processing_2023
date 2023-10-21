@@ -82,13 +82,14 @@ int main(int argc, char **argv) {
   ifs.exceptions(std::ifstream::badbit | std::ifstream::failbit); // Raise exceptions on failure
 
   try {
-    ifs.open(filepath, std::ifstream::binary | std::ifstream::ate);
+    ifs.open(filepath, std::ifstream::binary);
   } catch (const std::ifstream::failure &e) {
     std::cerr << "Failed to open file: " << filepath << std::endl;
     std::cerr << e.what() << std::endl;
     return 1;
   }
 
+  ifs.seekg(0, std::ifstream::end);
   auto end = ifs.tellg();
   ifs.seekg(0, std::ifstream::beg);
   size_t file_size = end - ifs.tellg();
