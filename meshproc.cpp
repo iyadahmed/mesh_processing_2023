@@ -52,7 +52,22 @@ static void read_ascii_stl(std::ifstream &ifs, std::vector<Triangle> &triangles)
   }
 }
 
-static void read_stl(size_t file_size, std::ifstream &ifs, std::vector<Triangle> &triangles) {
+static size_t calc_file_size(std::ifstream &ifs) {
+  auto original_pos = ifs.tellg();
+  ifs.seekg(0, std::ifstream::end);
+  auto end = ifs.tellg();
+  ifs.seekg(0, std::ifstream::beg);
+  size_t file_size = end - ifs.tellg();
+  ifs.seekg(original_pos, std::ifstream::beg);
+  return file_size;
+}
+
+static void read_stl(std::ifstream &ifs, std::vector<Triangle> &triangles) {
+  size_t file_size = calc_file_size(ifs);
+  if (file_size == 0) {
+    std::cout << "Empty file" << std::endl;
+    return;
+  }
   ifs.seekg(BINARY_STL_HEADER_SIZE, std::ifstream::beg); // Seek right past the header
 
   uint32_t num_triangles = 0;
@@ -89,17 +104,8 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  ifs.seekg(0, std::ifstream::end);
-  auto end = ifs.tellg();
-  ifs.seekg(0, std::ifstream::beg);
-  size_t file_size = end - ifs.tellg();
-
-  if (file_size == 0) {
-    std::cout << "Empty file" << std::endl;
-    return 0;
-  }
   std::vector<Triangle> triangles;
-  read_stl(file_size, ifs, triangles);
+  read_stl(ifs, triangles);
   std::cout << "Number of triangles: " << triangles.size() << std::endl;
 
   return 0;
