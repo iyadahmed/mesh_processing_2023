@@ -262,7 +262,7 @@ static void read_ply(std::ifstream &ifs, std::vector<Triangle> &triangles) {
 
 // Based on: https://en.cppreference.com/mwiki/index.php?title=cpp/string/byte/tolower&oldid=152869#Notes
 static std::string str_tolower(std::string s) {
-  std::ranges::transform(s, s.begin(), [](unsigned char c) { return std::tolower(c); });
+  std::ranges::transform(s, s.begin(), [](unsigned char c) { return std::tolower(c); }); // Thanks SonarLint!
   return s;
 }
 
