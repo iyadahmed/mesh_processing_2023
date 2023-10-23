@@ -111,19 +111,19 @@ static void read_binary_stl(uint32_t num_triangles, std::ifstream &ifs, std::vec
 static void read_ascii_stl(std::ifstream &ifs, std::vector<Triangle> &triangles) {
   while (ifs.good()) {
     std::string token;
-    ifs >> std::ws >> token >> std::ws;
+    ifs >> token;
     if (token == "facet") {
       Triangle t;
-      ifs >> std::ws >> token >> std::ws; // expecting "normal"
+      ifs >> token; // expecting "normal"
       ifs >> t.normal.x >> t.normal.y >> t.normal.z;
-      ifs >> std::ws >> token >> std::ws; // expecting "outer"
-      ifs >> std::ws >> token >> std::ws; // expecting "loop"
+      ifs >> token; // expecting "outer"
+      ifs >> token; // expecting "loop"
       for (int i = 0; i < 3; i++) {
-        ifs >> std::ws >> token >> std::ws; // expecting "vertex"
+        ifs >> token; // expecting "vertex"
         ifs >> t.vertices[i].x >> t.vertices[i].y >> t.vertices[i].z;
       }
-      ifs >> std::ws >> token >> std::ws; // expecting "endloop"
-      ifs >> std::ws >> token >> std::ws; // expecting "endfacet"
+      ifs >> token; // expecting "endloop"
+      ifs >> token; // expecting "endfacet"
       triangles.push_back(t);
     }
   }
