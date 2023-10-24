@@ -274,8 +274,9 @@ int main(int argc, char **argv) {
 
   std::string filepath = argv[1];
 
-  // What is the idiomatic C++17 standard approach to reading binary files?
-  // https://stackoverflow.com/a/51353040/8094047
+  /* "What is the idiomatic C++17 standard approach to reading binary files?":
+   * https://stackoverflow.com/a/51353040/8094047
+   */
 
   std::ifstream ifs;
   ifs.exceptions(std::ifstream::badbit | std::ifstream::failbit); // Raise exceptions on failure
