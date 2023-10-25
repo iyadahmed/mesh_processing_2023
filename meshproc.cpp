@@ -232,6 +232,8 @@ static void read_ply(std::ifstream &ifs, std::vector<Triangle> &triangles) {
   Parsed_PLY parsed_ply = read_ply(ifs);
   std::vector<Vec3f> vertices;
   for (const PLY_Element &e : parsed_ply.elements_map.at("vertex")) {
+    // TODO: reduce key lookups by storing properties as a map to **vector of vectors**, instead of storing
+    // properties in a vector of elements as a map to **vector of scalars**
     vertices.emplace_back(static_cast<float>(e.property_map.at("x").values[0]),
                           static_cast<float>(e.property_map.at("y").values[0]),
                           static_cast<float>(e.property_map.at("z").values[0]));
